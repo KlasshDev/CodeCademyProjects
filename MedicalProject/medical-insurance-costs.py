@@ -5,8 +5,8 @@
 
 # Questions, what are major factors to cost
 # [Done]Whats the average cost
-# What's the average age of participents
-# where are the majority from
+# [Done]What's the average age of participents
+# [Done]where are the majority from
 # what is the average age of someone with atleast 1 child
 # What what's the average cost per region, sex, age?
 # Smoker make a significant difference?
@@ -14,9 +14,9 @@
 # Can you use this data to accurately predict insurance costs
 
 # PROCESSING IDEAS
-# Use SQL
-# Make Dictionary
-# Look for NULL
+# Use SQL - Not option at this stage
+# Make Dictionary - Done
+# Look for NULL - Data is clean
 # Looks for formatting issues
 # Look for outliers
 #------------------------------------------------------------------------------
@@ -90,11 +90,11 @@ for row in InsuranceDict.values():
        smoker['Smoker'] += 1
     else:
        smoker['NonSmoker'] += 1
+
+
 #------------------------------------------------------------------------------
 #       Understanding Data
 #------------------------------------------------------------------------------
-
-
 
 # What is the MAX charge someone is paying (What about the least)
 print('The larges charge is:',max(charges), 'The smallest is:',min(charges))
@@ -121,3 +121,21 @@ print('The distribution of people with children is:', children)
 
 # Smokers distribution
 print('The distribution of smokers is:', smoker)
+
+
+#------------------------------------------------------------------------------
+#       Analytics
+#------------------------------------------------------------------------------
+
+# Make a function to see what effect 1 column has on insurance price
+def costEffect(column):
+    newDict = zip(column, charges) 
+    index = 0
+    sum1 = 0
+    sum2 = 0
+    for item in list(newDict):
+        if item[index] == item[0]:
+            sum1 += item[1]
+    return sum1, sum2
+
+print(costEffect(smokerList))
