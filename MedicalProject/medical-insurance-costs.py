@@ -1,3 +1,4 @@
+#------------------------------------------------------------------------------
 # perameters of dataset [age,sex,bmi,children,smoker,region,charges]
 # int: age, bmi, children, charges(float)
 # str: smoker(yes, no), region
@@ -18,6 +19,8 @@
 # Look for NULL
 # Looks for formatting issues
 # Look for outliers
+#------------------------------------------------------------------------------
+
 import csv
 
 #------------------------------------------------------------------------------
@@ -36,13 +39,11 @@ with open('insurance.csv', newline='') as insurance_csv:
         InsuranceDict[index] = row
         index += 1
 
-
+# Insurance charges
 charges = [float(charge['charges']) for charge in InsuranceDict.values()]
-ages = [float(charge['age']) for charge in InsuranceDict.values()]
 
-#------------------------------------------------------------------------------
-#       Understanding Data
-#------------------------------------------------------------------------------
+# Ages information
+ages = [float(charge['age']) for charge in InsuranceDict.values()]
 
 # Calculating Averages
 sumCost = 0
@@ -52,17 +53,71 @@ for row in InsuranceDict.values():
     sumAge += float(row['age'])
 averageCost = round((sumCost / len(InsuranceDict)),2)
 averageAge = round((sumAge / len(InsuranceDict)))
-print('The Average age of participants is:', averageAge)
-print('The average cost of heath insurance is:', averageCost)
+
+# BMI
+BMI = [float(row['bmi']) for row in InsuranceDict.values()]
+
+# Region information
+regionList = [row['region'] for row in InsuranceDict.values()]
+regionData = {}
+for row in InsuranceDict.values():
+    if row['region'] not in regionData:
+        regionData[row['region']] = 1
+    else:
+        regionData[row['region']] += 1
+
+# Sex distribution
+sexList = [row['sex'] for row in InsuranceDict.values()]
+sexData = {}
+for row in InsuranceDict.values():
+    if row['sex'] not in sexData:
+        sexData[row['sex']] = 1
+    else:
+        sexData[row['sex']] += 1
+# Children
+childrenList = [row['children'] for row in InsuranceDict.values()]
+children = {'Children':0, 'NoChildren':0} 
+for row in InsuranceDict.values():
+    if row['children'] != '0':
+       children['Children'] += 1
+    else:
+       children['NoChildren'] += 1
+# Smokers
+smokerList = [row['smoker'] for row in InsuranceDict.values()]
+smoker = {'Smoker':0, 'NonSmoker':0} 
+for row in InsuranceDict.values():
+    if row['smoker'] == 'yes':
+       smoker['Smoker'] += 1
+    else:
+       smoker['NonSmoker'] += 1
+#------------------------------------------------------------------------------
+#       Understanding Data
+#------------------------------------------------------------------------------
+
 
 
 # What is the MAX charge someone is paying (What about the least)
 print('The larges charge is:',max(charges), 'The smallest is:',min(charges))
+print('The average cost of heath insurance is:', averageCost)
+
+# Whats the age range we're looking at on this data set?
 print('The oldes age is:',max(ages), 'The youngest is:',min(ages))
+print('The Average age of participants is:', averageAge)
 
-# What group is paying above average
-# Make a function to test againsed different rows vs the average cost
-        
-# 22% of claims involving Smokers are paying above average    
+# Any regions polled higher then others worth mentioning?
+print('The', max(regionData), 'region was polled significantly higher ' \
+        'then the others')
 
+# Sex information, are they polled equally?
+print('The sexes were polled as', sexData, 'So not a significant bias')
 
+# BMI information
+print('The lowest BMI is:', round(min(BMI),2), "And the highest is",\
+        round(max(BMI), 2))
+print('The Average BMI is:', round(sum(BMI)/len(BMI),2))
+
+# Children situation
+print('The distribution of people with children is:', children)
+
+# Smokers distribution
+print('The distribution of smokers is:', smoker)
