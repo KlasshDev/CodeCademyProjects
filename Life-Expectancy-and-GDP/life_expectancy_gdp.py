@@ -7,18 +7,19 @@
 # ### Source: World Health Organization and the World Bank
 # 
 
-# In[12]:
+# In[5]:
 
 
 # Imports
 from matplotlib import pyplot as plt
 import seaborn as sns
 import pandas as pd
+import statsmodels.api as sm
 
 
 # # Initial Data Exploring
 
-# In[3]:
+# In[6]:
 
 
 # Load data from csv and print head
@@ -30,7 +31,7 @@ healthStats.rename(columns = {'Life expectancy at birth (years)':'Life_Expectanc
 print(healthStats.head())
 
 
-# In[4]:
+# In[7]:
 
 
 # Initial Data Explore
@@ -38,7 +39,7 @@ healthStats.info()
 healthStats.describe()
 
 
-# In[5]:
+# In[28]:
 
 
 # What Unique info
@@ -57,6 +58,13 @@ print(healthStats[healthStats['Life_Expectancy']
 
 print(healthStats.groupby('Country').agg({'Life_Expectancy': ['mean', 'min', 'max']}))
 
+# Linear Regression line GDP weight on life expectancy
+model = sm.OLS.from_formula('Life_Expectancy ~ GDP', data=healthStats)
+# Fit the model here:
+results = model.fit()
+# Print the coefficients here:
+print(results.params)
+
 
 # ### Initial Findings:
 # - Only 96 entries in data source
@@ -70,10 +78,11 @@ print(healthStats.groupby('Country').agg({'Life_Expectancy': ['mean', 'min', 'ma
 # - Lowest age: 44.3, Zimbabwe 2004
 # - Zimbabwe is in rough shape, Mean age is only 50 (from 44.3 to only 60.7)
 # - In contrast, Germany's mean is 79! (from 78 - 81)
+# - Positive linear relationship between GDP and Life expectancy.
 
 # # Visualizations
 
-# In[96]:
+# In[26]:
 
 
 # Average life expectancy by country over time
@@ -105,15 +114,15 @@ plt.title('GDP Over time By Country')
 plt.show()
 
 
+# Plot Life Expectancy vs GDP with Linear Regression Line
+sns.lmplot(x='Life_Expectancy', y='GDP', data=healthStats, height=6, aspect=2.5)
+plt.title('Life expectancy by GDP')
+plt.show()
+
+
 # # Conclusions
 # - While Zimbabwe is starting behind on both GDP and Life Expectency, they've made the biggest improvement. 
 # - China (And USA) has seen a spike in GDP, not as dramatic of boost in life expectation
 # - There is a positive corrolation between GDP and life expectancy.
 # 
 # 
-
-# In[ ]:
-
-
-
-
